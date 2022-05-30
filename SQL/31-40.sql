@@ -10,16 +10,11 @@ WITH T AS (
   FROM Classes AS C INNER JOIN Ships AS S
   ON C.class = S.class
 
-  UNION ALL
+  UNION
 
   SELECT DISTINCT country, bore, ship
   FROM Classes AS C INNER JOIN Outcomes AS O
   ON O.ship = C.class
-  AND NOT EXISTS (
-    SELECT *
-    FROM Ships AS S
-    WHERE S.name = O.ship
-  )
 )
 SELECT country, CONVERT(NUMERIC(6, 2), AVG(POWER(bore, 3) / 2)) as mw
 FROM T
