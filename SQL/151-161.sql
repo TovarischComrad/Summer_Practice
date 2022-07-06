@@ -212,7 +212,7 @@ SELECT ID_comp AS top_id, CONCAT(lower_hill, upper_hill) AS hill
 FROM T
 
 
--- #157 ***
+-- #157 
 WITH T AS (
   SELECT C.class, name AS ship
   FROM Ships S JOIN Classes C

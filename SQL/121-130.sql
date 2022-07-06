@@ -1,19 +1,36 @@
--- #121 (не проходит любое решение)
-SELECT name, launched, battle
-FROM (
-  SELECT ROW_NUMBER() OVER(PARTITION BY S.name ORDER BY B.date) n, 
-  S.name AS name, launched, B.name AS battle
-  FROM Ships S, Battles B
-  WHERE launched IS NOT NULL AND launched <= YEAR(B.date)
-) AS T
-WHERE n = 1
-  UNION
-SELECT name, launched, (
-  SELECT name FROM Battles
-  WHERE date = (SELECT MAX(date) FROM Battles)
-) AS battle
-FROM Ships
-WHERE launched IS NULL
+-- #121 
+WITH S AS (
+  SELECT S.name AS ship, launched, B.name AS battle, date
+  FROM Ships S LEFT JOIN Battles B
+  ON launched IS NULL OR launched <= YEAR(date)
+),
+R1 AS (
+  SELECT ship, MIN(launched) launched,
+  (
+    SELECT TOP 1 battle
+    FROM S AS I
+    WHERE O.ship = I.ship
+    ORDER BY date DESC
+  ) battle
+  FROM S AS O
+  WHERE launched IS NULL
+  GROUP BY ship
+),
+R2 AS (
+  SELECT ship, MIN(launched) launched, 
+  (
+    SELECT TOP 1 battle
+    FROM S AS I
+    WHERE O.ship = I.ship
+    ORDER BY ISNULL(date, '1800-01-01')
+  ) battle
+  FROM S AS O
+  WHERE launched IS NOT NULL
+  GROUP BY ship
+)
+SELECT * FROM R1
+  UNION ALL
+SELECT * FROM R2
 
 
 -- #122
