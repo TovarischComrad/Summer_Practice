@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>Code Race</title>
+        <script>
+            // Глобальные переменные
+            var dx = 0;
+            var dy = 0;
+            var x = 0;
+            var y = 0;
+            var arr = [];
+
+            // Описание объектов
+            class myObject {
+                constructor(type) {
+
+                    // Гоночный автомобиль
+                    if (type == "my_car") {
+                        this.width = "2%";
+                        this.height = "5%";
+                        this.left = "5%";
+                        this.bottom = "30%";
+                        this.position = "absolute";
+                        this.backgroundImage = "url(assets/img/car.jpg)";
+                        this.backgroundSize = "contain";
+                        this.id = "my_car";
+                        this.physics = true;
+                    }
+
+                    ///////////////////////////////////////////////
+                    ///   ОГРАЖДЕНИЯ                            ///
+                    ///////////////////////////////////////////////
+
+                    // Горизонтальные ограждения
+                    if(type == "hor_border_small") {
+                        this.width = "5%";
+                        this.height = "3%";
+                        this.bottom = "0px";
+                        this.left = "0px";
+                        this.position = "absolute";
+                        this.backgroundImage = "url(assets/img/hor_border_small.png)";
+                        this.backgroundSize = "contain";
+                        this.physics = true;
+                    }
+                    if(type == "hor_border_medium") {
+                        this.width = "10%";
+                        this.height = "3%";
+                        this.bottom = "0px";
+                        this.left = "0px";
+                        this.position = "absolute";
+                        this.backgroundImage = "url(assets/img/hor_border_medium.png)";
+                        this.backgroundSize = "contain";
+                        this.physics = true;
+                    }
+                    if(type == "hor_border_big") {
+                        this.width = "15%";
+                        this.height = "3%";
+                        this.bottom = "0px";
+                        this.left = "0px";
+                        this.position = "absolute";
+                        this.backgroundImage = "url(assets/img/hor_border_big.png)";
+                        this.backgroundSize = "contain";
+                        this.physics = true;
+                    }
+
+                    // Вертикальные ограждения
+                    if(type == "ver_border_smallest") {
+                        this.width = "2%";
+                        this.height = "5%";
+                        this.bottom = "0px";
+                        this.left = "0px";
+                        this.position = "absolute";
+                        this.backgroundImage = "url(assets/img/ver_border_smallest.png)";
+                        this.backgroundSize = "contain";
+                        this.physics = true;
+                    }
+                    if(type == "ver_border_small") {
+                        this.width = "2%";
+                        this.height = "10%";
+                        this.bottom = "0px";
+                        this.left = "0px";
+                        this.position = "absolute";
+                        this.backgroundImage = "url(assets/img/ver_border_small.png)";
+                        this.backgroundSize = "contain";
+                        this.physics = true;
+                    }
+                    if(type == "ver_border_medium") {
+                        this.width = "2%";
+                        this.height = "20%";
+                        this.bottom = "0px";
+                        this.left = "0px";
+                        this.position = "absolute";
+                        this.backgroundImage = "url(assets/img/ver_border_medium.png)";
+                        this.backgroundSize = "contain";
+                        this.physics = true;
+                    }
+                    if(type == "ver_border_big") {
+                        this.width = "2%";
+                        this.height = "30%";
+                        this.bottom = "0px";
+                        this.left = "0px";
+                        this.position = "absolute";
+                        this.backgroundImage = "url(assets/img/ver_border_big.png)";
+                        this.backgroundSize = "contain";
+                        this.physics = true;
+                    }
+
+                    ///////////////////////////////////////////////
+                    ///   ДОРОЖНОЕ ПОЛОТНО                      ///
+                    ///////////////////////////////////////////////
+
+                    if(type == "road") {
+                        this.width = "5%";
+                        this.height = "10%";
+                        this.bottom = "0px";
+                        this.left = "0px";
+                        this.position = "absolute";
+                        this.backgroundImage = "url(assets/img/asp.jpg)";
+                        this.backgroundSize = "contain";
+                        this.physics = false;
+                    }
+
+                    // Вертикальные дороги
+                    if(type == "ver_road_big") {
+                        this.width = "15%";
+                        this.height = "30%";
+                        this.bottom = "0px";
+                        this.left = "0px";
+                        this.position = "absolute";
+                        this.backgroundImage = "url(assets/img/asp.jpg)";
+                        this.backgroundSize = "contain";
+                        this.physics = false;
+                    }
+                    if(type == "ver_road_medium") {
+                        this.width = "10%";
+                        this.height = "30%";
+                        this.bottom = "0px";
+                        this.left = "0px";
+                        this.position = "absolute";
+                        this.backgroundImage = "url(assets/img/asp.jpg)";
+                        this.backgroundSize = "contain";
+                        this.physics = false;
+                    }
+                    if(type == "ver_road_small") {
+                        this.width = "5%";
+                        this.height = "30%";
+                        this.bottom = "0px";
+                        this.left = "0px";
+                        this.position = "absolute";
+                        this.backgroundImage = "url(assets/img/asp.jpg)";
+                        this.backgroundSize = "contain";
+                        this.physics = false;
+                    }
+                    if(type == "ver_road_smallest") {
+                        this.width = "2%";
+                        this.height = "5%";
+                        this.bottom = "0px";
+                        this.left = "0px";
+                        this.position = "absolute";
+                        this.backgroundImage = "url(assets/img/asp.jpg)";
+                        this.backgroundSize = "contain";
+                        this.physics = false;
+                    }
+
+                    // Горизонтальные дороги
+                    if(type == "hor_road_small") {
+                        this.width = "16%";
+                        this.height = "10%";
+                        this.bottom = "0px";
+                        this.left = "0px";
+                        this.position = "absolute";
+                        this.backgroundImage = "url(assets/img/asp.jpg)";
+                        this.backgroundSize = "contain";
+                        this.physics = false;
+                    }
+                }
+
+                myRender() {
+                    let d = document.createElement('div');
+                    d.style.width = this.width;
+                    d.style.height = this.height;
+                    d.style.bottom = this.bottom;
+                    d.style.left = this.left;
+                    d.style.position = this.position;
+                    d.style.backgroundImage = this.backgroundImage;
+                    d.style.backgroundSize = this.backgroundSize;
+                    d.id = this.id;
+                    document.body.appendChild(d);
+                }
+            }
+
+            // Пересечение блоков
+            function intersect (ax, ax1, ay, ay1, bx, bx1, by, by1) {
+                return (
+                    (
+                        (
+                            (ax >= bx && ax <= bx1) || (ax1 >= bx && ax1 <= bx1)
+                        ) && (
+                            (ay >= by && ay <= by1) || (ay1 >= by && ay1 <= by1)
+                        )
+                    ) || (
+                        (
+                            (bx >= ax && bx <= ax1) || (bx1 >= ax && bx1 <= ax1)
+                        ) && (
+                            (by >= ay && by <= ay1) || (by1 >= ay && by1 <= ay1)
+                        )
+                    )
+                ) || (
+                    (
+                        (
+                            (ax >= bx && ax <= bx1) || (ax1 >= bx && ax1 <= bx1)
+                        ) && (
+                            (by >= ay && by <= ay1) || (by1 >= ay && by1 <= ay1)
+                        )
+                    ) || (
+                        (
+                            (bx >= ax && bx <= ax1) || (bx1 >= ax && bx1 <= ax1)
+                        ) && (
+                            (ay >= by && ay <= by1) || (ay1 >= by && ay1 <= by1)
+                        )
+                    )
+                )
+            }
+
+            // Движение объекта
+            function moveX() {
+                if (x != 0) {
+                    x = x - dx;
+                    var fl = true;
+
+                    // Координаты машины
+                    var ax = parseInt(document.getElementById("my_car").style.left) / 100 * window.innerWidth + dx;
+			        var ax1 = parseInt(document.getElementById("my_car").style.left) / 100 * window.innerWidth + dx 
+                            + parseInt(document.getElementById("my_car").style.width) / 100 * window.innerWidth;
+                    var ay = parseInt(document.getElementById("my_car").style.bottom) / 100 * window.innerHeight;
+                    var ay1 = parseInt(document.getElementById("my_car").style.bottom) / 100 * window.innerHeight 
+                            + parseInt(document.getElementById("my_car").style.height) / 100 * window.innerHeight;
+
+                    // Перебор всех блоков
+                    for(var i = 0; i < arr.length; i++) {
+                        if(arr[i].id == "my_car") { continue; }
+                        if(!arr[i].physics) { continue; }
+                        var bx = parseInt(arr[i].left) / 100 * window.innerWidth;
+                        var bx1 = parseInt(arr[i].left) / 100 * window.innerWidth 
+                                + parseInt(arr[i].width) / 100 * window.innerWidth;
+                        var by = parseInt(arr[i].bottom) / 100 * window.innerHeight;
+                        var by1 = parseInt(arr[i].bottom) / 100 * window.innerHeight 
+                                + parseInt(arr[i].height) / 100 * window.innerHeight;
+
+                        if(intersect(ax, ax1, ay, ay1, bx, bx1, by, by1)) {
+                            fl = false;
+                            break;
+                        }
+                    }
+                    if(fl) {
+                        document.getElementById("my_car").style.left = parseInt(document.getElementById("my_car").style.left) + dx + "%";
+                    }    
+                }
+            }
+            function moveY() {
+                if (y != 0) {
+                    y = y - dy;
+                    var fl = true;
+
+                    // Координаты машины
+                    var ax = parseInt(document.getElementById("my_car").style.left) / 100 * window.innerWidth;
+			        var ax1 = parseInt(document.getElementById("my_car").style.left) / 100 * window.innerWidth 
+                            + parseInt(document.getElementById("my_car").style.width) / 100 * window.innerWidth;
+                    var ay = parseInt(document.getElementById("my_car").style.bottom) / 100 * window.innerHeight + dy;
+                    var ay1 = parseInt(document.getElementById("my_car").style.bottom) / 100 * window.innerHeight + dy
+                            + parseInt(document.getElementById("my_car").style.height) / 100 * window.innerHeight;
+
+                    // Перебор всех блоков
+                    for(var i = 0; i < arr.length; i++) {
+                        if(arr[i].id == "my_car") { continue; }
+                        if(!arr[i].physics) { continue; }
+                        var bx = parseInt(arr[i].left) / 100 * window.innerWidth;
+                        var bx1 = parseInt(arr[i].left) / 100 * window.innerWidth 
+                                + parseInt(arr[i].width) / 100 * window.innerWidth;
+                        var by = parseInt(arr[i].bottom) / 100 * window.innerHeight;
+                        var by1 = parseInt(arr[i].bottom) / 100 * window.innerHeight 
+                                + parseInt(arr[i].height) / 100 * window.innerHeight;
+
+                        if(intersect(ax, ax1, ay, ay1, bx, bx1, by, by1)) {
+                            fl = false;
+                            break;
+                        }
+                    }
+                    if (fl) {
+                        document.getElementById("my_car").style.bottom = parseInt(document.getElementById("my_car").style.bottom) + dy + "%";
+                    } 
+                }
+            }
+
+            // Обработчик нажатий клавиш
+            document.addEventListener("keydown", function(event){
+                // Налево
+                if(event.keyCode == 37) {
+                    x = -2;
+                    dx = -1;
+                }
+                // Направо
+                if(event.keyCode == 39) {
+                    x = 2;
+                    dx = 1;
+                }
+                // Вверх
+                if(event.keyCode == 38) {
+                    y = 2;
+                    dy = 1;
+                }
+                // Вниз
+                if(event.keyCode == 40) {
+                    y = -2;
+                    dy = -1;
+                }
+            })
+
+            // Обработчик событий
+            document.addEventListener('DOMContentLoaded', function(){
+
+                ///////////////////////////////////////////////
+                ///   ОГРАЖДЕНИЯ                            ///
+                ///////////////////////////////////////////////
+
+                // Горизонтальный участок
+                var b1 = new myObject("hor_border_big");
+                b1.bottom = "21%";
+                arr.push(b1);
+
+                var b2 = new myObject("hor_border_big");
+                b2.bottom = "54%";
+                arr.push(b2);
+
+                var b3 = new myObject("hor_border_big");
+                b3.bottom = "21%";
+                b3.left = "15%";
+                arr.push(b3);
+
+                var b4 = new myObject("hor_border_big");
+                b4.bottom = "54%";
+                b4.left = "15%";
+                arr.push(b4);
+
+                var b5 = new myObject("hor_border_medium");
+                b5.bottom = "24%";
+                b5.left = "30%";
+                arr.push(b5);
+
+                var b6 = new myObject("hor_border_medium");
+                b6.bottom = "57%";
+                b6.left = "30%";
+                arr.push(b6);
+
+                var b7 = new myObject("hor_border_small");
+                b7.bottom = "60%";
+                b7.left = "40%";
+                arr.push(b7);
+
+                var b8 = new myObject("hor_border_small");
+                b8.bottom = "27%";
+                b8.left = "40%";
+                arr.push(b8);
+
+                var b9 = new myObject("hor_border_small");
+                b9.bottom = "63%";
+                b9.left = "45%";
+                arr.push(b9);
+
+                var b10 = new myObject("hor_border_small");
+                b10.bottom = "30%";
+                b10.left = "45%";
+                arr.push(b10);
+
+                var b11 = new myObject("hor_border_small");
+                b11.bottom = "66%";
+                b11.left = "50%";
+                b11.width = "4%";
+                arr.push(b11);
+
+                var b12 = new myObject("hor_border_small");
+                b12.bottom = "33%";
+                b12.left = "50%";
+                arr.push(b12);
+
+                // Угловой участок
+                var b13 = new myObject("hor_border_small");
+                b13.bottom = "36%";
+                b13.left = "55%";
+                arr.push(b13);
+
+                var b14 = new myObject("ver_border_smallest");
+                b14.bottom = "39%";
+                b14.left = "60%";
+                b14.height = "6%";
+                arr.push(b14);
+
+                var b15 = new myObject("ver_border_smallest");
+                b15.bottom = "45%";
+                b15.left = "62%";
+                arr.push(b15);
+
+                var b16 = new myObject("ver_border_smallest");
+                b16.bottom = "50%";
+                b16.left = "64%";
+                arr.push(b16);
+
+                var b17 = new myObject("ver_border_smallest");
+                b17.bottom = "55%";
+                b17.left = "66%";
+                arr.push(b17);
+
+                var b18 = new myObject("ver_border_smallest");
+                b18.bottom = "60%";
+                b18.left = "68%";
+                arr.push(b18);
+
+                var b19 = new myObject("ver_border_smallest");
+                b19.bottom = "65%";
+                b19.left = "70%";
+                arr.push(b19);
+
+                // Вертикальный участок
+                var b20 = new myObject("ver_border_small");
+                b20.bottom = "69%";
+                b20.left = "54%";
+                b20.height = "11%";
+                arr.push(b20);
+
+                var b21 = new myObject("ver_border_small");
+                b21.bottom = "70%";
+                b21.left = "72%";
+                arr.push(b21);
+
+                var b22 = new myObject("ver_border_small");
+                b22.bottom = "80%";
+                b22.left = "56%";
+                arr.push(b22);
+
+                var b23 = new myObject("ver_border_small");
+                b23.bottom = "90%";
+                b23.left = "58%";
+                arr.push(b23);
+
+                var b24 = new myObject("ver_border_medium");
+                b24.bottom = "80%";
+                b24.left = "74%";
+                arr.push(b24);
+
+                ///////////////////////////////////////////////
+                ///   ДОРОЖНОЕ ПОЛОТНО                      ///
+                ///////////////////////////////////////////////
+
+                // Горизонтальный участок
+                var r1 = new myObject("ver_road_big");
+                r1.bottom = "24%";
+                arr.push(r1);
+
+                var r2 = new myObject("ver_road_big");
+                r2.bottom = "24%";
+                r2.left = "15%";
+                arr.push(r2);
+
+                var r3 = new myObject("ver_road_medium");
+                r3.bottom = "27%";
+                r3.left = "30%";
+                arr.push(r3);
+
+                var r4 = new myObject("ver_road_small");
+                r4.bottom = "30%";
+                r4.left = "40%";
+                arr.push(r4);
+
+                var r5 = new myObject("ver_road_small");
+                r5.bottom = "33%";
+                r5.left = "45%";
+                arr.push(r5);
+
+                var r6 = new myObject("ver_road_small");
+                r6.bottom = "36%";
+                r6.left = "50%";
+                arr.push(r6);
+
+                // Вертикальный участок
+                var r7 = new myObject("hor_road_small");
+                r7.bottom = "70%";
+                r7.left = "56%";
+                arr.push(r7);
+
+                var r8 = new myObject("hor_road_small");
+                r8.bottom = "80%";
+                r8.left = "58%";
+                arr.push(r8);
+
+                var r9 = new myObject("hor_road_small");
+                r9.bottom = "90%";
+                r9.left = "60%";
+                r9.width = "14%";
+                arr.push(r9);
+
+                // Угловой участок
+                var r10 = new myObject("ver_road_small");
+                r10.bottom = "39%";
+                r10.left = "54%";
+                r10.width = "6%";
+                arr.push(r10);
+
+                var r11 = new myObject("road");
+                r11.bottom = "60%";
+                r11.left = "55%";
+                r11.width = "13%";
+                r11.height = "9%";
+                arr.push(r11);
+
+                var r12 = new myObject("road");
+                r12.bottom = "65%";
+                r12.left = "56%";
+                r12.width = "14%";
+                r12.height = "5%";
+                arr.push(r12);
+
+                var r13 = new myObject("road");
+                r13.bottom = "50%";
+                r13.left = "60%";
+                r13.width = "4%";
+                arr.push(r13);
+
+                var r14 = new myObject("ver_road_smallest");
+                r14.bottom = "45%";
+                r14.left = "60%";
+                arr.push(r14);
+
+                var r15 = new myObject("ver_road_smallest");
+                r15.bottom = "55%";
+                r15.left = "64%";
+                arr.push(r15);
+
+                // Гоночный автомобиль
+                var car = new myObject("my_car");
+                arr.push(car);
+
+                for(var i = 0; i < arr.length; i++) {
+                    arr[i].myRender();
+                }
+                var myIntervalX = setInterval(moveX, 5);
+                var myIntervalY = setInterval(moveY, 5);
+            })
+        </script>
+
+    </head>
+
+    <body style="
+        background-image: url(assets/img/grass4.jpg);
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        overflow: hidden;">
+    </body>
+</html>
